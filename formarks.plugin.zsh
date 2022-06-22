@@ -12,13 +12,16 @@ if [[ -z ${PATHMARKS_EXA_COMMAND} ]] ; then
     PATHMARKS_EXA_COMMAND='exa -lbhg --git'
 fi
 
+if [[ -z ${PATHMARKS_FZF_COMMAND} ]] ; then
+    PATHMARKS_FZF_COMMAND=(--height '40%' --preview-window="right:50%")
+fi
+
 wfxr::pathmarks-fzf() {
     local list
     (( $+commands[exa] )) && list=${PATHMARKS_EXA_COMMAND} || list='ls -l'
-    fzf --ansi \
-        --height '40%' \
+    fzf ${PATHMARKS_FZF_COMMAND[*]} \
+        --ansi \
         --preview="echo {}|sed 's#.*->  ##'| xargs $list --color=always" \
-        --preview-window="right:50%" \
         "$@"
 }
 
