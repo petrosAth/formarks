@@ -8,18 +8,18 @@
 [ -z "${PATHMARKS_FILE}" ] && export PATHMARKS_FILE=$HOME/.pathmarks
 [ ! -f $PATHMARKS_FILE ] && mkdir -p "$(dirname "$PATHMARKS_FILE")" && touch "$PATHMARKS_FILE"
 
-if [[ -z ${PATHMARKS_EXA_COMMAND} ]] ; then
-    PATHMARKS_EXA_COMMAND=(-lbhg --git)
+if [[ -z ${FORMARKS_EXA_COMMAND} ]] ; then
+    FORMARKS_EXA_COMMAND=(-lbhg --git)
 fi
 
-if [[ -z ${PATHMARKS_FZF_COMMAND} ]] ; then
-    PATHMARKS_FZF_COMMAND=(--height '40%' --preview-window="right:50%")
+if [[ -z ${FORMARKS_FZF_COMMAND} ]] ; then
+    FORMARKS_FZF_COMMAND=(--height '40%' --preview-window="right:50%")
 fi
 
 wfxr::pathmarks-fzf() {
     local list
-    (( $+commands[exa] )) && list='exa '${PATHMARKS_EXA_COMMAND[*]} || list='ls -l'
-    fzf ${PATHMARKS_FZF_COMMAND[*]} \
+    (( $+commands[exa] )) && list='exa '${FORMARKS_EXA_COMMAND[*]} || list='ls -l'
+    fzf ${FORMARKS_FZF_COMMAND[*]} \
         --ansi \
         --preview="echo {}|sed 's#.*->  ##'| xargs $list --color=always" \
         "$@"
