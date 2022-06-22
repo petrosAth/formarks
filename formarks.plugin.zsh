@@ -8,9 +8,13 @@
 [ -z "${PATHMARKS_FILE}" ] && export PATHMARKS_FILE=$HOME/.pathmarks
 [ ! -f $PATHMARKS_FILE ] && mkdir -p "$(dirname "$PATHMARKS_FILE")" && touch "$PATHMARKS_FILE"
 
+if [[ -z ${PATHMARKS_EXA_COMMAND} ]] ; then
+    PATHMARKS_EXA_COMMAND='exa -lbhg --git'
+fi
+
 wfxr::pathmarks-fzf() {
     local list
-    (( $+commands[exa] )) && list='exa -lbhg --git' || list='ls -l'
+    (( $+commands[exa] )) && list=${PATHMARKS_EXA_COMMAND} || list='ls -l'
     fzf --ansi \
         --height '40%' \
         --preview="echo {}|sed 's#.*->  ##'| xargs $list --color=always" \
@@ -102,7 +106,7 @@ function jump() {
         wfxr::pathmarks-fzf --query="$*" -1|
         sed 's#.*->  ##')
     if [[ -d "$target" ]]; then
-        cd "$target" 
+        cd "$target"
         local precmd
         for precmd in $precmd_functions; do
             $precmd
